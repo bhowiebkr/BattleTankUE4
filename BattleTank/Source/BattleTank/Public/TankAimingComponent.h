@@ -8,6 +8,7 @@
 
 // Forward Declaration
 class UTankBarrel; 
+class UTankTurret;
 
 
 // Holds barrel properties
@@ -20,6 +21,7 @@ public:
 	UTankAimingComponent();
 
 	void SetBarrelReference(UTankBarrel* BarrelToSet);
+	void SetTurretReference(UTankTurret* TurretToSet);
 
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	
@@ -29,6 +31,7 @@ public:
 
 private:
 	UTankBarrel* Barrel = nullptr;
+	UTankTurret* Turret = nullptr;
 
 	void MoveBarrelTowards(FVector AimDirection)const;
 };
