@@ -5,41 +5,35 @@
 #include "Tank.h"
 
 
-ATank* ATankAIController::GetControlledTank() const { return Cast<ATank>(GetPawn()); }
 
-
-ATank* ATankAIController::GetPlayerTank() const
-{
-	auto PlayerPawn = GetWorld()->GetFirstPlayerController()->GetPawn();
-	if (!PlayerPawn) { return nullptr; }
-
-	return Cast<ATank>(PlayerPawn);
-}
 
 void ATankAIController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	auto PlayerTank = GetPlayerTank();
-
-	if (!PlayerTank)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("AIController can't find player tank"));
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("AIController found player: %s"), *(PlayerTank->GetName()));
-	}
 }
-
 
 void ATankAIController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (GetPlayerTank())
+	bool isReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTimeInSeconds;
+
+	// Get the player tank and exit if we can't find it
+	ATank* PlayerTank = Cast<ATank>(GetWorld()->GetFirstPlayerController()->GetPawn());
+
+	ATank* AITank = Cast<ATank>(GetPawn());
+	AITank->AimAt(PlayerTank->GetActorLocation());
+
+	if (PlayerTank && isReloaded)
 	{
-		FVector PlayerTankLocation = GetPlayerTank()->GetActorLocation();
-		GetControlledTank()->AimAt(PlayerTankLocation);
+		// Move towards the player
+		MoveToActor(
+			PlayerTank,
+			AcceptanceRadius
+			);
+
+		AITank->Fire();
+		LastFireTime = FPlatformTime::Seconds();
 	}
 }
