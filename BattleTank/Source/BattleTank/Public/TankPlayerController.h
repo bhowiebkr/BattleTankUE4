@@ -15,21 +15,24 @@ class BATTLETANK_API ATankPlayerController : public APlayerController
 
 public:
 	virtual void BeginPlay() override;
-	virtual void Tick(float DeltaTime) override; 
+	virtual void Tick(float DeltaTime) override;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = ScreenAimingPosition)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "ScreenAimingPosition")
 		float AimX = 0.5f;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = ScreenAimingPosition)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "ScreenAimingPosition")
 		float AimY = 0.333f;
 
-private:
+protected:
+	UFUNCTION(BlueprintCallable, Category = "Setup")
 	ATank* GetControlledTank() const;
+
+private:
 
 	// Start the tank moving the barrel so that a shot would hit where
 	// the cross hair intersects the world
 	void AimTowardsCrosshair();
 
 	UPROPERTY(EditDefaultsOnly)
-	float LineTraceRange = 1000000;
+		float LineTraceRange = 1000000;
 };
