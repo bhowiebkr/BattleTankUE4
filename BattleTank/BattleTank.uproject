@@ -1,7 +1,9 @@
 {
 	"FileVersion": 3,
 	"EngineAssociation": "4.18",
-	"Category": "",
+  "
+    
+    ": "",
 	"Description": "",
 	"Modules": [
 		{
@@ -12,6 +14,12 @@
 				"Engine",
 				"AIModule"
 			]
+		}
+	],
+	"Plugins": [
+		{
+			"Name": "OculusVR",
+			"Enabled": false
 		}
 	]
 }
