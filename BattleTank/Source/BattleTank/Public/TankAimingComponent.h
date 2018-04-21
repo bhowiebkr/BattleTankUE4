@@ -7,6 +7,9 @@
 #include "TankAimingComponent.generated.h"
 
 
+class AProjectile;
+
+
 // Enum for the aiming states
 UENUM()
 enum class EFireingState : uint8
@@ -35,6 +38,9 @@ public:
 	// Aim at the hit location use launch speed for velocity
 	void AimAt(FVector HitLocation);
 
+	UFUNCTION(BlueprintCallable, Category = "Fire")
+	void Fire();
+
 
 protected:
 
@@ -43,18 +49,23 @@ protected:
 	EFireingState FiringState = EFireingState::Locked;
 
 private:
-	// Constructor
 	UTankAimingComponent();
 
-	// hold the barrel and turret
+	void MoveBarrelTowards(FVector AimDirection)const;
+
 	UTankBarrel* Barrel = nullptr;
 	UTankTurret* Turret = nullptr;
 
-
-	// TODO remove when firing is moved to the aiming component
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
 	float LaunchSpeed = 10000.f;
 
-	// Move the barrel towards a vector
-	void MoveBarrelTowards(FVector AimDirection)const;
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+	TSubclassOf<AProjectile> ProjectileBlueprint;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Firing")
+	float ReloadTimeInSeconds = 3;
+
+	double LastFireTime = 0;
+
+
 };
