@@ -21,6 +21,9 @@ void UTankAimingComponent::Initialize(UTankBarrel* BarrelToSet, UTankTurret* Tur
 {
 	Barrel = BarrelToSet;
 	Turret = TurretToSet;
+
+	Turret->GetName();
+
 }
 
 void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection) const
@@ -32,7 +35,8 @@ void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection) const
 	// rotate the turret into position over time
 	// rotate the barrel into position over time
 
-	if (!Barrel || !Turret) { return; }
+	if (!ensure(Barrel) || !ensure(Turret)) { return; }
+
 
 	FRotator BarrelRotator = Barrel->GetForwardVector().Rotation();
 	FRotator AimAsRotator = AimDirection.Rotation();
@@ -43,9 +47,13 @@ void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection) const
 }
 
 
-void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
+void UTankAimingComponent::AimAt(FVector HitLocation)
 {
-	if (!Barrel || !Turret) { return; }
+	if (!ensure(Barrel) || !ensure(Turret)) { 
+		UE_LOG(LogTemp, Warning, TEXT("missing barrel or turret"));
+
+		return; 
+	}
 
 	FVector OutLaunchVelocity;
 	FVector StartLocation = Barrel->GetSocketLocation(FName("Projectile"));

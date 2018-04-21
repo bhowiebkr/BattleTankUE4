@@ -7,7 +7,7 @@
 #include "TankAimingComponent.generated.h"
 
 
-// Enum for aiming state
+// Enum for the aiming states
 UENUM()
 enum class EFireingState : uint8
 {
@@ -28,22 +28,33 @@ class BATTLETANK_API UTankAimingComponent : public UActorComponent
 	GENERATED_BODY()
 
 public:
+	// Initialize the with the barrel and the turret
 	UFUNCTION(BlueprintCallable, Category = "Setup")
 	void Initialize(UTankBarrel* BarrelToSet, UTankTurret* TurretToSet);
 	
-	void AimAt(FVector HitLocation, float LaunchSpeed);
+	// Aim at the hit location use launch speed for velocity
+	void AimAt(FVector HitLocation);
+
 
 protected:
+
+	// The current state of firing based on the enum state
 	UPROPERTY(BlueprintReadOnly, Category = "State")
-	EFireingState FiringState = EFireingState::Aiming;
+	EFireingState FiringState = EFireingState::Locked;
 
 private:
+	// Constructor
 	UTankAimingComponent();
 
+	// hold the barrel and turret
 	UTankBarrel* Barrel = nullptr;
 	UTankTurret* Turret = nullptr;
 
-	
 
+	// TODO remove when firing is moved to the aiming component
+	UPROPERTY(EditDefaultsOnly, Category = "Firing")
+	float LaunchSpeed = 10000.f;
+
+	// Move the barrel towards a vector
 	void MoveBarrelTowards(FVector AimDirection)const;
 };

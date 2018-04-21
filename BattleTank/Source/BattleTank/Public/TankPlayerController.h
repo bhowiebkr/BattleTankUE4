@@ -6,7 +6,9 @@
 #include "GameFramework/PlayerController.h"
 #include "TankPlayerController.generated.h"
 
-class ATank;
+class UTankAimingComponent;
+
+// Responsible for helping the player aim
 
 UCLASS()
 class BATTLETANK_API ATankPlayerController : public APlayerController
@@ -24,8 +26,8 @@ public:
 		float AimY = 0.333f;
 
 protected:
-	UFUNCTION(BlueprintCallable, Category = "Setup")
-	ATank* GetControlledTank() const;
+	UFUNCTION(BlueprintImplementableEvent, Category = "Setup")
+	void FoundAimingComponint(UTankAimingComponent* AimCompRef);
 
 private:
 

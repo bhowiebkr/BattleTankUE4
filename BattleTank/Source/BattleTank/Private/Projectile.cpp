@@ -23,7 +23,7 @@ void AProjectile::BeginPlay()
 
 void AProjectile::LaunchProjectile(float Speed)
 {
-	if (!ProjectileMovementComponent)
+	if (!ensure(ProjectileMovementComponent))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("ProjectileMovementComponent not set!"))
 		return;

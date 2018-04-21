@@ -9,8 +9,6 @@
 // Forward declarations
 class UTankBarrel;
 class UTankTurret;
-class UTankAimingComponent;
-class UTankMovementComponent;
 class AProjectile;
 
 UCLASS()
@@ -22,27 +20,21 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Fire")
 		void Fire();
 
-	void AimAt(FVector HitLocation);
-
-protected:
-	UPROPERTY(BlueprintReadOnly)
-	UTankAimingComponent*  TankAimingComponent = nullptr;
-
-	UPROPERTY(BlueprintReadOnly)
-	UTankMovementComponent* TankMovementComponent = nullptr;
 
 private:
 	ATank();
 
+	virtual void BeginPlay() override;
+
 	UPROPERTY(EditDefaultsOnly, Category = "Setup")
 	TSubclassOf<AProjectile> ProjectileBlueprint;
 
+	// TODO remove when firing is moved to the aiming component
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
-	float LaunchSpeed = 10000.f; // TODO find Sensible starting default value
+	float LaunchSpeed = 10000.f;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
 	float ReloadTimeInSeconds = 3;
-
 
 	UTankBarrel* Barrel = nullptr; // TODO remove
 

@@ -2,9 +2,7 @@
 
 #include "TankAIController.h"
 #include "Engine/World.h"
-#include "Tank.h"
-
-
+#include "TankAimingComponent.h"
 
 
 void ATankAIController::BeginPlay()
@@ -20,20 +18,15 @@ void ATankAIController::Tick(float DeltaTime)
 	bool isReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTimeInSeconds;
 
 	// Get the player tank and exit if we can't find it
-	ATank* PlayerTank = Cast<ATank>(GetWorld()->GetFirstPlayerController()->GetPawn());
+	APawn* PlayerTank = GetWorld()->GetFirstPlayerController()->GetPawn();
+	APawn* ControlledTank = GetPawn();
 
-	ATank* AITank = Cast<ATank>(GetPawn());
-	AITank->AimAt(PlayerTank->GetActorLocation());
+	if (!ensure(PlayerTank && ControlledTank)) { return; }
 
-	if (PlayerTank && isReloaded)
-	{
-		// Move towards the player
-		MoveToActor(
-			PlayerTank,
-			AcceptanceRadius
-			);
+	UTankAimingComponent* AimingComponent = ControlledTank->FindComponentByClass<UTankAimingComponent>();
 
-		AITank->Fire();
-		LastFireTime = FPlatformTime::Seconds();
-	}
+	AimingComponent->AimAt(PlayerTank->GetActorLocation());
+
+	// TODO fix firing
+	// ControlledTank->Fire   ...
 }

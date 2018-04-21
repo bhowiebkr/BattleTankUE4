@@ -1,26 +1,16 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
+
 #include "TankPlayerController.h"
+#include "TankAimingComponent.h"
 #include "Engine/World.h"
-#include "Tank.h"
-
-ATank* ATankPlayerController::GetControlledTank() const { return Cast<ATank>(GetPawn()); }
-
 
 void ATankPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-
-	ATank* ControlledTank = GetControlledTank();
-
-	if (!ControlledTank)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("PlayerController not possesing a tank"));
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("PlayerController possesing: %s"), *(ControlledTank->GetName()));
-	}
+	UTankAimingComponent* AimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
+	if (!ensure(AimingComponent)) { return; }
+	FoundAimingComponint(AimingComponent);
 }
 
 void ATankPlayerController::Tick(float DeltaTime)
@@ -31,9 +21,12 @@ void ATankPlayerController::Tick(float DeltaTime)
 
 void ATankPlayerController::AimTowardsCrosshair()
 {
-	// Get tank
-	ATank* MyTank = GetControlledTank();
-	if (!MyTank) { return; }
+	UTankAimingComponent* AimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
+	if (!ensure(AimingComponent)) { 
+		UE_LOG(LogTemp, Warning, TEXT("Missing AimingComponent"));
+		return; 
+	}
+
 
 	FVector HitLocation = FVector(0);
 
@@ -55,7 +48,8 @@ void ATankPlayerController::AimTowardsCrosshair()
 		if (GetWorld()->LineTraceSingleByChannel(HitResult, StartLocation, EndLocation, ECollisionChannel::ECC_Visibility))
 		{
 			HitLocation = HitResult.Location;
+
 		}
 	}
-	MyTank->AimAt(HitLocation);
+	AimingComponent->AimAt(HitLocation);
 }
