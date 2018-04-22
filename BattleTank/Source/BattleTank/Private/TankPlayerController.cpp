@@ -21,10 +21,13 @@ void ATankPlayerController::Tick(float DeltaTime)
 
 void ATankPlayerController::AimTowardsCrosshair()
 {
+	if (!GetPawn()) { return; } // if not possessing
+
 	UTankAimingComponent* AimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
-	if (!ensure(AimingComponent)) { 
+	if (!ensure(AimingComponent))
+	{
 		UE_LOG(LogTemp, Warning, TEXT("Missing AimingComponent"));
-		return; 
+		return;
 	}
 
 

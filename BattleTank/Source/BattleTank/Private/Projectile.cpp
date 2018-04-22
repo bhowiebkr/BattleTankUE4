@@ -28,8 +28,6 @@ void AProjectile::LaunchProjectile(float Speed)
 		UE_LOG(LogTemp, Warning, TEXT("ProjectileMovementComponent not set!"))
 		return;
 	}
-	UE_LOG(LogTemp, Warning, TEXT("Projectile fires at speed: %f"), Speed)
-
 	ProjectileMovementComponent->SetVelocityInLocalSpace(FVector::ForwardVector * Speed);
 	ProjectileMovementComponent->Activate();
 }
