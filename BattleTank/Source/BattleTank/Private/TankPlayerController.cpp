@@ -51,7 +51,13 @@ void ATankPlayerController::AimTowardsCrosshair()
 		if (GetWorld()->LineTraceSingleByChannel(HitResult, StartLocation, EndLocation, ECollisionChannel::ECC_Visibility))
 		{
 			HitLocation = HitResult.Location;
-
+		}
+		else
+		{
+			FVector CameraLocation;
+			FVector CameraDirection;
+			DeprojectScreenPositionToWorld(ScreenLocation.X, ScreenLocation.Y, CameraLocation, CameraDirection);
+			HitLocation = FVector(CameraLocation + CameraDirection * 10000);
 		}
 	}
 	AimingComponent->AimAt(HitLocation);
