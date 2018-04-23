@@ -58,7 +58,11 @@ void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection) const
 
 void UTankAimingComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction)
 {
-	if ((FPlatformTime::Seconds() - LastFireTime) < ReloadTimeInSeconds)
+	if (RoundsLeft <= 0)
+	{
+		FiringState = EFireingState::OutOfAmmo;
+	}
+	else if ((FPlatformTime::Seconds() - LastFireTime) < ReloadTimeInSeconds)
 	{
 		FiringState = EFireingState::Reloading;
 	}
@@ -114,7 +118,7 @@ void UTankAimingComponent::AimAt(FVector HitLocation)
 
 void UTankAimingComponent::Fire()
 {
-	if (FiringState != EFireingState::Reloading)
+	if (FiringState == EFireingState::Locked || FiringState == EFireingState::Aiming)
 	{
 		if (!ensure(Barrel)) { return; }
 		if (!ensure(ProjectileBlueprint)) { return; }
@@ -128,6 +132,7 @@ void UTankAimingComponent::Fire()
 
 		Projectile->LaunchProjectile(LaunchSpeed);
 		LastFireTime = FPlatformTime::Seconds();
+		RoundsLeft--;
 	}
 }
 
@@ -135,4 +140,14 @@ void UTankAimingComponent::BeginPlay()
 {
 	// So that first fire is after initial reload
 	LastFireTime = FPlatformTime::Seconds();
+}
+
+int UTankAimingComponent::GetRoundsLeft() const
+{
+	return RoundsLeft;
+}
+
+EFireingState UTankAimingComponent::GetFiringState() const
+{
+	return FiringState;
 }

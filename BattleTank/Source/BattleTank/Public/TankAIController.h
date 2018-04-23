@@ -12,7 +12,11 @@ class BATTLETANK_API ATankAIController : public AAIController
 	GENERATED_BODY()
 
 public:
-	
+
+protected:
+	// How close can the AI tank get to the player
+	UPROPERTY(EditAnywhere, Category="Setup") // Consider EditDefaultsOnly
+	float AcceptanceRadius = 8000;
 
 private:
 	void BeginPlay() override;
@@ -20,10 +24,4 @@ private:
 
 	float ReloadTimeInSeconds = 3.f;
 	double LastFireTime = 0.f;
-
-	// How close can the AI tank get to the player
-	float AcceptanceRadius = 3000;
-
-
-
 };
