@@ -80,7 +80,7 @@ bool UTankAimingComponent::IsBarrelMoving()
 {
 	if (!ensure(Barrel)) { return false; }
 	FVector BarrelForward = Barrel->GetForwardVector();
-	return !BarrelForward.Equals(AimDirection, 0.1);
+	return !BarrelForward.Equals(AimDirection, 0.05);
 }
 
 void UTankAimingComponent::AimAt(FVector HitLocation)
@@ -142,7 +142,7 @@ void UTankAimingComponent::BeginPlay()
 	LastFireTime = FPlatformTime::Seconds();
 }
 
-int UTankAimingComponent::GetRoundsLeft() const
+int32 UTankAimingComponent::GetRoundsLeft() const
 {
 	return RoundsLeft;
 }

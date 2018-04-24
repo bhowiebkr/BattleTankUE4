@@ -40,12 +40,12 @@ public:
 	void AimAt(FVector HitLocation);
 
 	UFUNCTION(BlueprintCallable, Category = "Fire")
-	void Fire();
+		void Fire();
 
 	virtual void BeginPlay();
 
 	UFUNCTION(BlueprintCallable, Category = "Fire")
-	int GetRoundsLeft() const;
+		int32 GetRoundsLeft() const;
 
 	EFireingState GetFiringState() const;
 
@@ -69,17 +69,18 @@ private:
 	UTankTurret* Turret = nullptr;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
-		float LaunchSpeed = 10000.f;
+	float LaunchSpeed = 10000.f;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Setup")
-		TSubclassOf<AProjectile> ProjectileBlueprint;
+	TSubclassOf<AProjectile> ProjectileBlueprint;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
-		float ReloadTimeInSeconds = 3;
+	float ReloadTimeInSeconds = 3;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Firing")
+	int32 RoundsLeft = 3;
 
 	double LastFireTime = 0;
 
 	FVector AimDirection;
-
-	int RoundsLeft = 3;
 };
