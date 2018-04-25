@@ -1,9 +1,13 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Projectile.h"
+#include "CoreMinimal.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Engine/World.h"
+#include "GameFramework/DamageType.h"
+#include "GameFramework/Actor.h"
+#include "Kismet/GameplayStatics.h"
 #include "Particles/ParticleSystemComponent.h"
 
 
@@ -58,10 +62,21 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimi
 	LaunchBlast->Deactivate();
 	ExplosionForce->FireImpulse();
 	ImpactBlast->Activate();
-	CollisionMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);	
+	CollisionMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	UGameplayStatics::ApplyRadialDamage(
+		this,
+		ProjectileDamage,
+		GetActorLocation(),
+		ExplosionForce->Radius, // for consistency
+		UDamageType::StaticClass(),
+		TArray<AActor*>() // damage all actors
+	);
+
 
 	FTimerHandle Timer;
 	GetWorld()->GetTimerManager().SetTimer(Timer, this, &AProjectile::OnTimerExpire, DestroyDelay, false);
+
 }
 
 void AProjectile::OnTimerExpire()
