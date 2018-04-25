@@ -49,7 +49,7 @@ void ATankPlayerController::AimTowardsCrosshair()
 		FVector EndLocation = StartLocation + (LookDirection * LineTraceRange);
 
 		// If we have a hit in the world, set the HitLocation
-		if (GetWorld()->LineTraceSingleByChannel(HitResult, StartLocation, EndLocation, ECollisionChannel::ECC_Visibility))
+		if (GetWorld()->LineTraceSingleByChannel(HitResult, StartLocation, EndLocation, ECollisionChannel::ECC_Camera))
 		{
 			HitLocation = HitResult.Location;
 		}
