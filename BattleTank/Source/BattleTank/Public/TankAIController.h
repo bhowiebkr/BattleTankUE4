@@ -19,9 +19,12 @@ protected:
 	float AcceptanceRadius = 8000;
 
 private:
-	void BeginPlay() override;
+	virtual void BeginPlay() override;
+
+	virtual void SetPawn(APawn* InPawn) override;
+
 	virtual void Tick(float DeltaTime) override;
 
-	float ReloadTimeInSeconds = 3.f;
-	double LastFireTime = 0.f;
+	UFUNCTION()
+	void OnPossedTankDeath();
 };
